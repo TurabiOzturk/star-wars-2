@@ -146,7 +146,6 @@ homeworldsUnique.forEach((i) => {
 
 // homeworld değerlerini yeni bir arraye ata
 const homeworld = homeworldsLowercase;
-
 // homeworld değerlerini checkbox olarak render et
 function renderCheckBoxes() {
   const checkboxContainer = document.getElementById("checkboxContainer");
@@ -237,34 +236,31 @@ function removeCharacters() {
 
 // karakterleri filtrele ve ekrana bas
 function filterCharacters() {
-  if (
-    isActive == false ||
-    filteredHomeworld == undefined ||
-    filteredHomeworld == "" ||
-    filteredHomeworld == null
-  ) {
+  if (!isActive || !filteredHomeworld) {
     alert("Please select a homeworld to filter by");
     return;
   } else {
-    for (i = 0; i < homeworld.length; i++) {
-      if (homeworld[i] == filteredHomeworld) {
-        const row = document.querySelector(".row");
+    const existingRow = document.querySelector(".row");
+    if (existingRow) existingRow.remove();
 
-        row.remove();
-        const newRow = document.createElement("div");
-        newRow.classList.add("row");
-        charContainer.append(newRow);
+    const newRow = document.createElement("div");
+    newRow.classList.add("row");
+    charContainer.append(newRow);
 
+    for (let i = 0; i < characters.length; i++) {
+      let newHome = characters[i].homeworld ?? "other";
+
+      if (newHome.toLowerCase() === filteredHomeworld) {
         let charImage = characters[i].pic;
         let charName = characters[i].name;
         let charHomeworld = characters[i].homeworld;
         let cardHtml = `<div class="card mx-auto mt-2" style="width: 18rem;">
-                <img class="card-img-top" src="${charImage}">
-                <div class="card-body">
-                    <h5 class="card-title">${charName}</h5>
-                    <p class="card-text">This character's from <strong>${charHomeworld}</strong></p>
-                </div>
-                </div>`;
+    <img class="card-img-top" src="${charImage}">
+    <div class="card-body">
+      <h5 class="card-title">${charName}</h5>
+      <p class="card-text">This character's from <strong>${charHomeworld}</strong></p>
+    </div>
+    </div>`;
         newRow.innerHTML += cardHtml;
       }
     }
@@ -274,8 +270,6 @@ function filterCharacters() {
 // filtreleri temizle
 function clearFilter() {
   if (isFiltered == true) {
-    console.log(isFiltered);
-    console.log(isActive);
     radioBoxes.forEach((radioBox) => {
       radioBox.checked = false;
     });
